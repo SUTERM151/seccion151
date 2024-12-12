@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUTERM 151</title>
+    <link rel="icon" href="lo2.JPG" type="image/x-icon">
+    <style>
+      /* Reseteo de márgenes y padding */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-image: url('bg.png');
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+      }
+
+      /* Formulario de Login */
+      .form-login {
+        width: 100%;
+        max-width: 400px;
+        height: 340px;
+        background: rgba(78, 77, 77, 0.8);
+        margin: auto;
+        margin-top: 180px;
+        box-shadow: 7px 13px 37px #000;
+        padding: 20px 30px;
+        border-top: 4px solid #017bab;
+        color: white;
+      }
+
+      .form-login h5 {
+        margin: 0;
+        text-align: center;
+        height: 40px;
+        margin-bottom: 30px;
+        border-bottom: 1px solid;
+        font-size: 20px;
+      }
+
+      .controls {
+        width: 100%;
+        border: 1px solid #017bab;
+        margin-bottom: 15px;
+        padding: 11px 10px;
+        background: white;
+        font-size: 14px;
+        font-weight: bold;
+      }
+
+      .buttons {
+        width: 100%;
+        height: 40px;
+        background: #017bab;
+        border: none;
+        color: white;
+        margin-bottom: 16px;
+        cursor: pointer;
+      }
+
+      .form-login p {
+        height: 40px;
+        text-align: center;
+        border-bottom: 1px solid;
+      }
+
+      .form-login a {
+        color: white;
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .form-login a:hover {
+        text-decoration: underline;
+      }
+
+      /* Media Queries para adaptarse a diferentes tamaños de pantalla */
+      @media (max-width: 600px) {
+        .form-login {
+          width: 90%;
+          margin-top: 100px;
+        }
+
+        .controls {
+          font-size: 12px;
+        }
+
+        .buttons {
+          font-size: 14px;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .form-login {
+          width: 100%;
+          margin-top: 60px;
+        }
+
+        .controls, .buttons {
+          font-size: 12px;
+        }
+      }
+
+      /* Contenido de Usuario */
+      .user-info {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px 30px;
+        margin: auto;
+        background: rgba(78, 77, 77, 0.8);
+        box-shadow: 7px 13px 37px #000;
+        border-top: 4px solid #017bab;
+        color: white;
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      .user-info h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+      .user-info button {
+        width: 100%;
+        height: 40px;
+        background: #017bab;
+        border: none;
+        color: white;
+        cursor: pointer;
+      }
+
+    </style>
+  </head>
+  <body>
+    <!-- Comprobar si ya está autenticado -->
+    <script>
+      if (sessionStorage.getItem('loggedInUser')) {
+        const userPage = sessionStorage.getItem('loggedInUser');
+        window.location.replace(userPage); // Redirige si ya está autenticado
+      }
+    </script>
+
+    <!-- Sección del Login -->
+    <section class="form-login" id="loginContainer">
+      <h5>Bienvenido</h5>
+      <form id="loginForm">
+        <input class="controls" type="text" name="RPE" id="RPE" placeholder="RPE" required>
+        <input class="controls" type="password" name="contrasena" id="contrasena" placeholder="Contraseña" required>
+        <input class="buttons" type="submit" value="Ingresar">
+      </form>
+      <p><a href="#">¿Olvidaste tu Contraseña?</a></p>
+    </section>
+
+    <!-- Contenido del Usuario (Estará oculto por defecto) -->
+    <div id="userContainer" class="user-info" style="display: none;">
+      <h1 id="userName">Bienvenido</h1>
+      <p id="userInfo">Información del usuario.</p>
+      <button onclick="logout()">Cerrar sesión</button>
+    </div>
+
+    <script>
+      // Usuarios simulados
+      const users = [
+        { username: '9JPKL', password: '1234', name: '', info: '', page: 'enter.html' },
+        { username: 'CE734', password: 'abcd', name: '', info: '', page: 'nacho.html' }
+      ];
+
+      // Función para manejar el login
+      document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const username = document.getElementById('RPE').value;
+        const password = document.getElementById('contrasena').value;
+
+        const user = users.find(u => u.username === username && u.password === password);
+
+        if (user) {
+          // Guardar al usuario en la sesión
+          sessionStorage.setItem('loggedInUser', user.page);
+          // Redirigir a la página de información personal del usuario
+          window.location.href = user.page;
+        } else {
+          alert('Usuario o contraseña incorrectos.');
+        }
+      });
+
+      // Función para cerrar sesión
+      function logout() {
+        sessionStorage.removeItem('loggedInUser'); // Eliminar sesión
+        window.location.href = 'index.html'; // Redirigir a la página de inicio de sesión
+        history.replaceState(null, null, location.href); // Evitar regresar al perfil
+      }
+    </script>
+
+  </body>
+</html>
